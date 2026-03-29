@@ -69,6 +69,12 @@ ul { list-style: none; }
   --rail-w: 80px;
   --bnav-h: 72px;
   --tbar-h: 0px;
+
+  /* HERO AVATAR BLOBS */
+  --blob-a: 60% 40% 55% 45% / 45% 55% 40% 60%;
+  --blob-b: 45% 55% 40% 60% / 55% 45% 60% 40%;
+  --blob-c: 50% 50% 45% 55% / 40% 60% 55% 45%;
+  --blob-d: 40% 60% 60% 40% / 60% 40% 45% 55%;
 }
 
 /* ═══════════════════════════════════════
@@ -496,7 +502,7 @@ section {
   width: 220px; height: 220px;
   flex-shrink: 0;
   background-color: var(--primary-container);
-  border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%;
+  border-radius: var(--blob-a);
   display: flex; align-items: center; justify-content: center;
   font-family: 'Nunito', sans-serif;
   font-size: 5rem; font-weight: 900;
@@ -506,10 +512,10 @@ section {
   position: relative;
 }
 @keyframes blob {
-  0%,100% { border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%; }
-  25%      { border-radius: 45% 55% 40% 60% / 55% 45% 60% 40%; }
-  50%      { border-radius: 50% 50% 45% 55% / 40% 60% 55% 45%; }
-  75%      { border-radius: 40% 60% 60% 40% / 60% 40% 45% 55%; }
+  0%,100% { border-radius: var(--blob-a); }
+  25%      { border-radius: var(--blob-b); }
+  50%      { border-radius: var(--blob-c); }
+  75%      { border-radius: var(--blob-d); }
 }
 
 /* ═══════════════════════════════════════
@@ -997,6 +1003,16 @@ footer {
 .footer-links { display: flex; gap: 12px; }
 .footer-link { color: var(--primary); font-weight: 600; text-decoration: none; font-size: 0.82rem; }
 .footer-link:hover { text-decoration: underline; }
+.footer-heart {
+  display: inline-flex;
+  align-items: center;
+  color: var(--primary);
+}
+.footer-heart svg {
+  width: 0.95em;
+  height: 0.95em;
+  fill: currentColor;
+}
 
 /* ═══════════════════════════════════════
    SCROLLBAR
@@ -1043,7 +1059,7 @@ footer {
 
   footer {
     margin-left: 0;
-    padding: 24px 20px;
+    padding: 24px 20px calc(var(--bnav-h) + env(safe-area-inset-bottom) + 20px);
     flex-direction: column;
     text-align: center;
   }

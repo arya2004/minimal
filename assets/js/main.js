@@ -12,20 +12,105 @@ const THEMES = [
 
 const MODE_KEY = 'ap-mode';
 const LAST_THEME_INDEX_KEY = 'ap-last-theme-index';
+const FAVICON_ID = 'ap-favicon';
+
+const AVATAR_BLOB_SETS = [
+  [
+    '60% 40% 55% 45% / 45% 55% 40% 60%',
+    '45% 55% 40% 60% / 55% 45% 60% 40%',
+    '50% 50% 45% 55% / 40% 60% 55% 45%',
+    '40% 60% 60% 40% / 60% 40% 45% 55%'
+  ],
+  [
+    '58% 42% 38% 62% / 57% 36% 64% 43%',
+    '44% 56% 63% 37% / 42% 62% 38% 58%',
+    '66% 34% 49% 51% / 48% 57% 43% 52%',
+    '39% 61% 54% 46% / 63% 45% 55% 37%'
+  ],
+  [
+    '52% 48% 67% 33% / 38% 68% 32% 62%',
+    '62% 38% 42% 58% / 61% 35% 65% 39%',
+    '47% 53% 58% 42% / 52% 48% 60% 40%',
+    '69% 31% 45% 55% / 40% 56% 44% 60%'
+  ],
+  [
+    '36% 64% 49% 51% / 60% 42% 58% 40%',
+    '54% 46% 31% 69% / 47% 63% 37% 53%',
+    '63% 37% 56% 44% / 33% 69% 31% 67%',
+    '42% 58% 66% 34% / 56% 40% 60% 44%'
+  ],
+  [
+    '68% 32% 52% 48% / 44% 61% 39% 56%',
+    '49% 51% 36% 64% / 67% 34% 66% 33%',
+    '57% 43% 61% 39% / 51% 47% 53% 49%',
+    '41% 59% 47% 53% / 59% 41% 48% 52%'
+  ]
+];
 
 let currentTheme = 0;
 let isDark = false;
+let currentAvatarBlobSet = -1;
 
 const root = document.documentElement;
+
+function applyAvatarBlobSet() {
+  if (AVATAR_BLOB_SETS.length === 0) return;
+
+  let next = currentAvatarBlobSet;
+  if (AVATAR_BLOB_SETS.length === 1) {
+    next = 0;
+  } else {
+    while (next === currentAvatarBlobSet) {
+      next = Math.floor(Math.random() * AVATAR_BLOB_SETS.length);
+    }
+  }
+
+  const [a, b, c, d] = AVATAR_BLOB_SETS[next];
+  root.style.setProperty('--blob-a', a);
+  root.style.setProperty('--blob-b', b);
+  root.style.setProperty('--blob-c', c);
+  root.style.setProperty('--blob-d', d);
+  currentAvatarBlobSet = next;
+}
+
+function updateFavicon() {
+  const styles = getComputedStyle(root);
+  const bg = styles.getPropertyValue('--primary').trim() || '#0f766e';
+  const fg = styles.getPropertyValue('--on-primary').trim() || '#ffffff';
+  const themeBg = styles.getPropertyValue('--bg').trim() || bg;
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="${bg}"/><text x="32" y="40" font-size="24" text-anchor="middle" fill="${fg}" font-family="Arial,sans-serif">AP</text></svg>`;
+  const href = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+
+  let icon = document.getElementById(FAVICON_ID) || document.querySelector('link[rel~="icon"]');
+  if (!icon) {
+    icon = document.createElement('link');
+    icon.setAttribute('rel', 'icon');
+    icon.setAttribute('type', 'image/svg+xml');
+    document.head.appendChild(icon);
+  }
+  icon.id = FAVICON_ID;
+  icon.setAttribute('href', href);
+
+  let themeColorMeta = document.querySelector('meta[name="theme-color"]');
+  if (!themeColorMeta) {
+    themeColorMeta = document.createElement('meta');
+    themeColorMeta.setAttribute('name', 'theme-color');
+    document.head.appendChild(themeColorMeta);
+  }
+  themeColorMeta.setAttribute('content', themeBg);
+}
 
 function applyTheme(index, { showToast = true } = {}) {
   const t = THEMES[index];
   root.style.setProperty('--h', t.hue);
   root.style.setProperty('--c', t.chroma + '%');
+  applyAvatarBlobSet();
   localStorage.setItem(LAST_THEME_INDEX_KEY, String(index));
   /* update labels */
   document.getElementById('rail-theme-name').textContent = t.name;
   if (showToast) showSnackbar(t.name);
+  updateFavicon();
 }
 
 function cycleTheme() {
@@ -42,6 +127,7 @@ function toggleDark() {
     const el = document.getElementById(id);
     if (el) el.textContent = isDark ? 'light_mode' : 'dark_mode';
   });
+  updateFavicon();
 }
 
 function applyStoredMode() {

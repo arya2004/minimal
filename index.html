@@ -5,7 +5,9 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
-  <title>Arya Pathak — Portfolio</title>
+  <title>Arya Pathak</title>
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f766e'/%3E%3Ctext x='32' y='40' font-size='24' text-anchor='middle' fill='white' font-family='Arial,sans-serif'%3EAP%3C/text%3E%3C/svg%3E" />
   <meta content="Arya Pathak — Computer Engineering student, SDE intern at PhonePe, open source contributor"
     name="description" />
   <script src="assets/js/theme-init.js"></script>
@@ -175,20 +177,28 @@
 
             <!-- Mobile: brief summary -->
             <p class="exp-brief">
-              Redesigned the EGV gift card redemption workflow in a Java Dropwizard microservice, replacing per-card DB
-              queries with batch fetches to handle 300+ cards efficiently. Modernized test infra with Guice-based
-              injection,
-              eliminating config duplication across JUnit suites.
+              Designed a bulk gift card creation API eliminating manual ops handoff. Built maker-checker dashboards with
+              Fabricator for ops team autonomy. Redesigned EGV redemption workflow using shard-level batch fetches to
+              support 300+ cards; migrated OkHttp to PhonePe's internal HTTP handler. Enhanced platform reliability by
+              modernizing dependencies, enabling YAML anchor reuse (Rosey), refactoring JUnit with Guice injection, and
+              rolling out Feature Factory CI across PPI projects (Wallet, Gift Card Service, Distributor Service).
             </p>
 
             <!-- Desktop: full bullets -->
             <ul class="exp-list exp-list-full">
-              <li>Redesigned the EGV redemption workflow in a Java Dropwizard microservice to replace per-card DB
-                queries with shard-level batch fetches after balance reservation, enabling efficient redemption for
-                high-volume users (300+ gift cards) and reducing database load.</li>
-              <li>Strengthened platform maintainability by modernizing dependencies, enabling YAML anchor reuse in
-                service configs (Rosey), and refactoring JUnit test infrastructure with Guice-based injection and shared
-                base test classes, eliminating configuration duplication.</li>
+              <li>Designed and built a bulk gift card creation API for Qwikcilver in a Java Dropwizard microservice,
+                exposing 5 endpoints for synchronous B2C single creation, async B2B bulk creation, cancellation, status,
+                and details, eliminating the manual ops handoff previously required to provision gift cards.</li>
+              <li>Built maker-checker dashboards for the bulk GC creation flow using Fabricator (internal drag-and-drop
+                dashboard tool), enabling ops teams to initiate, review, and approve bulk gift card requests without
+                engineering intervention.</li>
+              <li>Redesigned the EGV redemption workflow to replace per-card DB queries with shard-level batch fetches
+                after balance reservation, supporting users with 300+ gift cards without degrading performance; migrated
+                OkHttp calls to PhonePe's internal HTTP handler in the Gift Card Service.</li>
+              <li>Modernized dependencies and enabled YAML anchor reuse in service configs (Rosey); refactored JUnit
+                test infrastructure with Guice-based injection and shared base classes to cut configuration duplication;
+                rolled out Feature Factory CI support across all PPI projects (Wallet, Gift Card Service, Distributor
+                Service) to automate feature environment creation in GitHub pipelines.</li>
             </ul>
           </div>
         </div>
@@ -206,7 +216,7 @@
             <p class="exp-brief">
               Built a Golang AI agent bot on Microsoft Teams using Gemini API to automate GCP IAM tasks via natural
               language. Deployed a Cloud Run backend for bulk onboarding and audit logging — cutting setup time by
-              <strong>45%</strong>.
+              <strong>45&#37;</strong>.
             </p>
 
             <!-- Desktop: full bullets -->
@@ -216,7 +226,7 @@
                 perform IAM, role, and service account operations through natural language.</li>
               <li>Designed a secure, cloud-native backend on Google Cloud Run supporting bulk onboarding, role
                 assignments, and audit logging — reducing multi-user setup and query resolution time by
-                <strong>45%</strong>.
+                <strong>45&#37;</strong>.
               </li>
             </ul>
           </div>
@@ -235,7 +245,7 @@
             <p class="exp-brief">
               Built a sandboxed in-browser Python execution engine using WebAssembly and Pyodide for 500+ users.
               Deployed a Node.js/Express RCE backend on AWS EC2, and published a C# NuGet package that cut
-              execution latency by <strong>30%</strong>.
+              execution latency by <strong>30&#37;</strong>.
             </p>
 
             <!-- Desktop: full bullets -->
@@ -246,7 +256,7 @@
                 AWS EC2 with Nginx reverse proxy, processing 1K+ executions/month for 500+ users via WebAssembly and
                 Pyodide.</li>
               <li>Published a C# NuGet package for safe local Python code execution, reducing latency by
-                <strong>30%</strong>.
+                <strong>30&#37;</strong>.
               </li>
             </ul>
           </div>
@@ -516,7 +526,7 @@
             <div class="edu-degree">Bachelor of Technology in Computer Engineering</div>
             <div class="edu-pills">
               <span class="edu-pill">GPA: 9.06 / 10.0</span>
-              <span class="edu-pill year">2022 – Present</span>
+              <span class="edu-pill year">2022 - Present</span>
             </div>
           </div>
         </div>
@@ -526,8 +536,8 @@
             <div class="edu-school">SP College, Pune</div>
             <div class="edu-degree">Higher Secondary Certificate (Science)</div>
             <div class="edu-pills">
-              <span class="edu-pill">83.33%</span>
-              <span class="edu-pill year">2020 – 2022</span>
+              <span class="edu-pill">83.33&#37;</span>
+              <span class="edu-pill year">2020 - 2022</span>
             </div>
           </div>
         </div>
@@ -537,8 +547,8 @@
             <div class="edu-school">SPM English School, Pune</div>
             <div class="edu-degree">Secondary School Certificate</div>
             <div class="edu-pills">
-              <span class="edu-pill">88.80%</span>
-              <span class="edu-pill year">2010 – 2020</span>
+              <span class="edu-pill">88.80&#37;</span>
+              <span class="edu-pill year">2010 - 2020</span>
             </div>
           </div>
         </div>
@@ -553,40 +563,40 @@
       </div>
       <div class="ach-grid">
         <div class="ach-item reveal d1">
-          <span class="ach-emoji">🥇</span>
+          <span class="ach-emoji">&#x1F947;</span>
           <span class="ach-text">1st place &amp; PPO offer (27 LPA) — Juspay Hiring Challenge · Jan 2026</span>
         </div>
         <div class="ach-item reveal d2">
-          <span class="ach-emoji">🥇</span>
+          <span class="ach-emoji">&#x1F947;</span>
           <span class="ach-text">1st place — PhonePe Bootcamp Hackathon</span>
         </div>
         <div class="ach-item reveal d3">
-          <span class="ach-emoji">🏆</span>
+          <span class="ach-emoji">&#x1F3C6;</span>
           <span class="ach-text">Top 15 Finalist — Deloitte Hackspliosion Hackathon</span>
         </div>
         <div class="ach-item reveal d4">
-          <span class="ach-emoji">📄</span>
+          <span class="ach-emoji">&#x1F4C4;</span>
           <span class="ach-text">Best Paper of the Session — IEEE ESCI 2025 (Smart Computing track)</span>
         </div>
         <div class="ach-item reveal d1">
-          <span class="ach-emoji">🎟️</span>
+          <span class="ach-emoji">&#x1F39F;&#xFE0F;</span>
           <span class="ach-text">Sweepstakes Winner — Microsoft AI Skills Fest · Free certification voucher · May
             2025</span>
         </div>
         <div class="ach-item reveal d2">
-          <span class="ach-emoji">💵</span>
+          <span class="ach-emoji">&#x1F4B5;</span>
           <span class="ach-text">$225 Prize — AI &amp; Verbwire API track, Hackspiration '24 · MLSC VIT Pune</span>
         </div>
         <div class="ach-item reveal d3">
-          <span class="ach-emoji">🚀</span>
+          <span class="ach-emoji">&#x1F680;</span>
           <span class="ach-text">3rd place — Astrafizz National Level Hackathon · Jan 2024</span>
         </div>
         <div class="ach-item reveal d4">
-          <span class="ach-emoji">🌿</span>
+          <span class="ach-emoji">&#x1F33F;</span>
           <span class="ach-text">Category Winner — Biomimicry Build-a-thon · IYBS · Feb 2025</span>
         </div>
         <div class="ach-item reveal d1">
-          <span class="ach-emoji">🥈</span>
+          <span class="ach-emoji">&#x1F948;</span>
           <span class="ach-text">Runner-up — ISA GenDev Hackathon</span>
         </div>
       </div>
@@ -597,17 +607,17 @@
           <div class="sec-eyebrow">Competitive Programming</div>
         </div>
         <div class="cp-row">
-          <a class="cp-card reveal d1" href="https://leetcode.com/arya2004" rel="noopener" target="_blank">
+          <a class="cp-card reveal d1" href="https://leetcode.com/u/_arya2004/" rel="noopener" target="_blank">
             <div class="cp-platform">LeetCode</div>
             <div class="cp-rank">Knight</div>
             <div class="cp-rating">Rating: 1860</div>
           </a>
-          <a class="cp-card reveal d2" href="https://codeforces.com/profile/arya2004" rel="noopener" target="_blank">
+          <a class="cp-card reveal d2" href="https://codeforces.com/profile/_arya2004" rel="noopener" target="_blank">
             <div class="cp-platform">Codeforces</div>
             <div class="cp-rank">Specialist</div>
             <div class="cp-rating">Rating: 1402</div>
           </a>
-          <a class="cp-card reveal d3" href="https://www.codechef.com/users/arya2004" rel="noopener" target="_blank">
+          <a class="cp-card reveal d3" href="https://www.codechef.com/users/arya2004io" rel="noopener" target="_blank">
             <div class="cp-platform">CodeChef</div>
             <div class="cp-rank">3 ★</div>
             <div class="cp-rating">Rating: 1694</div>
@@ -724,7 +734,11 @@
   </main>
   <!-- ─── FOOTER ─── -->
   <footer>
-    <span>© 2025 Arya Pathak · Built with Material 3 Expressive</span>
+    <span>Built with <span class="footer-heart" aria-label="love"><svg viewBox="0 0 24 24" role="img" aria-hidden="true"
+          focusable="false">
+          <path
+            d="M12 21.35 10.55 20.03C5.4 15.36 2 12.28 2 8.5A5.5 5.5 0 0 1 7.5 3C9.24 3 10.91 3.81 12 5.09 13.09 3.81 14.76 3 16.5 3A5.5 5.5 0 0 1 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+        </svg></span> by Claude Sonnet 4.6</span>
     <div class="footer-links">
       <a class="footer-link" href="mailto:arya.m.pathak@gmail.com">Email</a>
       <a class="footer-link" href="https://github.com/arya2004" rel="noopener" target="_blank">GitHub</a>
