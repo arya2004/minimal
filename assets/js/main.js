@@ -8,70 +8,28 @@ const THEMES = [
   { id: 'violet',      name: 'Violet',      hue: 270, chroma: 85  },
   { id: 'sage',        name: 'Sage',        hue: 145, chroma: 65  },
   { id: 'obsidian',    name: 'Obsidian',    hue: 220, chroma: 18  },
+  { id: 'indigo',      name: 'Indigo',      hue: 232, chroma: 78  },
+  { id: 'frost',       name: 'Frost',       hue: 205, chroma: 42  },
+  { id: 'lemongrass',  name: 'Lemongrass',  hue:  78, chroma: 72  },
+  { id: 'moonstone',   name: 'Moonstone',   hue: 213, chroma: 44  },
+  { id: 'jade',        name: 'Jade',        hue: 151, chroma: 48  },
+  { id: 'porcelain',   name: 'Porcelain',   hue:  36, chroma: 28  },
+  { id: 'lavender',    name: 'Lavender',    hue: 255, chroma: 62  },
+  { id: 'berry',       name: 'Berry',       hue: 346, chroma: 92  },
+  { id: 'fog',         name: 'Fog',         hue: 150, chroma: 20  },
 ];
 
 const MODE_KEY = 'ap-mode';
 const LAST_THEME_INDEX_KEY = 'ap-last-theme-index';
 const FAVICON_ID = 'ap-favicon';
-
-const AVATAR_BLOB_SETS = [
-  [
-    '60% 40% 55% 45% / 45% 55% 40% 60%',
-    '45% 55% 40% 60% / 55% 45% 60% 40%',
-    '50% 50% 45% 55% / 40% 60% 55% 45%',
-    '40% 60% 60% 40% / 60% 40% 45% 55%'
-  ],
-  [
-    '58% 42% 38% 62% / 57% 36% 64% 43%',
-    '44% 56% 63% 37% / 42% 62% 38% 58%',
-    '66% 34% 49% 51% / 48% 57% 43% 52%',
-    '39% 61% 54% 46% / 63% 45% 55% 37%'
-  ],
-  [
-    '52% 48% 67% 33% / 38% 68% 32% 62%',
-    '62% 38% 42% 58% / 61% 35% 65% 39%',
-    '47% 53% 58% 42% / 52% 48% 60% 40%',
-    '69% 31% 45% 55% / 40% 56% 44% 60%'
-  ],
-  [
-    '36% 64% 49% 51% / 60% 42% 58% 40%',
-    '54% 46% 31% 69% / 47% 63% 37% 53%',
-    '63% 37% 56% 44% / 33% 69% 31% 67%',
-    '42% 58% 66% 34% / 56% 40% 60% 44%'
-  ],
-  [
-    '68% 32% 52% 48% / 44% 61% 39% 56%',
-    '49% 51% 36% 64% / 67% 34% 66% 33%',
-    '57% 43% 61% 39% / 51% 47% 53% 49%',
-    '41% 59% 47% 53% / 59% 41% 48% 52%'
-  ]
-];
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const coarsePointer = window.matchMedia('(pointer: coarse)');
 
 let currentTheme = 0;
 let isDark = false;
-let currentAvatarBlobSet = -1;
+let themeShiftTimer = null;
 
 const root = document.documentElement;
-
-function applyAvatarBlobSet() {
-  if (AVATAR_BLOB_SETS.length === 0) return;
-
-  let next = currentAvatarBlobSet;
-  if (AVATAR_BLOB_SETS.length === 1) {
-    next = 0;
-  } else {
-    while (next === currentAvatarBlobSet) {
-      next = Math.floor(Math.random() * AVATAR_BLOB_SETS.length);
-    }
-  }
-
-  const [a, b, c, d] = AVATAR_BLOB_SETS[next];
-  root.style.setProperty('--blob-a', a);
-  root.style.setProperty('--blob-b', b);
-  root.style.setProperty('--blob-c', c);
-  root.style.setProperty('--blob-d', d);
-  currentAvatarBlobSet = next;
-}
 
 function updateFavicon() {
   const styles = getComputedStyle(root);
@@ -105,17 +63,41 @@ function applyTheme(index, { showToast = true } = {}) {
   const t = THEMES[index];
   root.style.setProperty('--h', t.hue);
   root.style.setProperty('--c', t.chroma + '%');
-  applyAvatarBlobSet();
   localStorage.setItem(LAST_THEME_INDEX_KEY, String(index));
   /* update labels */
   document.getElementById('rail-theme-name').textContent = t.name;
-  if (showToast) showSnackbar(t.name);
+  ['rail-theme-btn', 'top-theme-btn'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.setAttribute('aria-label', `Change color theme. Current theme: ${t.name}`);
+      el.title = `Current theme: ${t.name}`;
+    }
+  });
+  if (showToast) {
+    showSnackbar(`${t.name} palette`);
+    playThemeShift();
+  }
   updateFavicon();
+}
+
+function playThemeShift() {
+  if (reducedMotion.matches) return;
+  clearTimeout(themeShiftTimer);
+  root.classList.remove('theme-shifting');
+  void root.offsetWidth;
+  root.classList.add('theme-shifting');
+  themeShiftTimer = window.setTimeout(() => root.classList.remove('theme-shifting'), 420);
+}
+
+function haptic(pattern = 8) {
+  if (!coarsePointer.matches || typeof navigator.vibrate !== 'function') return;
+  navigator.vibrate(pattern);
 }
 
 function cycleTheme() {
   currentTheme = (currentTheme + 1) % THEMES.length;
   applyTheme(currentTheme);
+  haptic([8, 30, 8]);
 }
 
 function toggleDark() {
@@ -127,6 +109,17 @@ function toggleDark() {
     const el = document.getElementById(id);
     if (el) el.textContent = isDark ? 'light_mode' : 'dark_mode';
   });
+  ['rail-dark-btn', 'top-dark-btn'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.setAttribute('aria-pressed', String(isDark));
+      el.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+      el.title = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+    }
+  });
+  playThemeShift();
+  showSnackbar(isDark ? 'Night mode' : 'Day mode');
+  haptic(12);
   updateFavicon();
 }
 
@@ -143,6 +136,14 @@ function applyStoredMode() {
   ['rail-dark-icon', 'top-dark-icon'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.textContent = iconValue;
+  });
+  ['rail-dark-btn', 'top-dark-btn'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.setAttribute('aria-pressed', String(isDark));
+      el.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+      el.title = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+    }
   });
 }
 
@@ -186,42 +187,76 @@ function showSnackbar(text) {
 
 /* ─── FAB ─── */
 const fab = document.getElementById('fab');
-window.addEventListener('scroll', () => {
+const scrollProgress = document.getElementById('scroll-progress');
+let scrollFrame = null;
+let lastScrollY = window.scrollY;
+let lastScrollTime = performance.now();
+let scrollSettleTimer = null;
+
+function updateScrollState() {
   fab.classList.toggle('show', window.scrollY > 320);
-}, { passive: true });
-fab.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  if (scrollFrame !== null) return;
+  scrollFrame = requestAnimationFrame(now => {
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = scrollable > 0 ? Math.min(window.scrollY / scrollable, 1) : 0;
+    scrollProgress.style.transform = `scaleX(${progress})`;
+
+    if (!reducedMotion.matches) {
+      const elapsed = Math.max(now - lastScrollTime, 16);
+      const distance = window.scrollY - lastScrollY;
+      const intensity = Math.min(Math.abs(distance) / elapsed / 2.5, 1);
+      const direction = Math.sign(distance);
+
+      root.style.setProperty('--scroll-pack', String(1 - intensity * 0.012));
+      root.style.setProperty('--scroll-drift', `${direction * intensity * 5}px`);
+
+      clearTimeout(scrollSettleTimer);
+      scrollSettleTimer = window.setTimeout(() => {
+        root.style.setProperty('--scroll-pack', '1');
+        root.style.setProperty('--scroll-drift', '0px');
+      }, 90);
+    }
+
+    lastScrollY = window.scrollY;
+    lastScrollTime = now;
+    scrollFrame = null;
+  });
+}
+
+window.addEventListener('scroll', updateScrollState, { passive: true });
+updateScrollState();
+fab.addEventListener('click', () => {
+  haptic(8);
+  window.scrollTo({ top: 0, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+});
 
 /* ─── ACTIVE NAV ON SCROLL ─── */
 const sections = ['hero', 'experience', 'projects', 'skills', 'education', 'achievements'];
 const allNavItems = document.querySelectorAll('.nav-item[data-section]');
+
+allNavItems.forEach(item => {
+  if (item.dataset.section === 'hero') item.setAttribute('aria-current', 'page');
+});
 
 const sectionObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       const id = entry.target.id;
       allNavItems.forEach(item => {
-        item.classList.toggle('active', item.dataset.section === id);
+        const representedSections = (item.dataset.sections || item.dataset.section).split(' ');
+        const isActive = representedSections.includes(id);
+        item.classList.toggle('active', isActive);
+        if (isActive) item.setAttribute('aria-current', 'page');
+        else item.removeAttribute('aria-current');
       });
     }
   });
-}, { threshold: 0.35 });
+}, { threshold: 0, rootMargin: '-28% 0px -62% 0px' });
 
 sections.forEach(id => {
   const el = document.getElementById(id);
   if (el) sectionObserver.observe(el);
 });
-
-/* ─── SCROLL REVEAL ─── */
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
 /* ─── SMOOTH SCROLL FOR NAV ─── */
 document.querySelectorAll('a[href^="#"]').forEach(link => {
@@ -229,19 +264,25 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
     const target = document.querySelector(link.getAttribute('href'));
     if (target) {
       e.preventDefault();
-      const offset = isDark ? 0 : 0;
-      const topOffset = window.innerWidth <= 768 ? 64 : 0;
+      const topBar = document.querySelector('.top-app-bar');
+      const topOffset = window.innerWidth <= 768 && topBar ? topBar.offsetHeight : 0;
+      haptic(6);
       window.scrollTo({
         top: target.offsetTop - topOffset - 16,
-        behavior: 'smooth'
+        behavior: reducedMotion.matches ? 'auto' : 'smooth'
       });
     }
   });
 });
 
+/* ─── TACTILE FEEDBACK ─── */
+document.querySelectorAll('.btn, .proj-card, .chip, .cp-card, .cert-card').forEach(control => {
+  control.addEventListener('click', () => haptic(7));
+});
+
 /* ─── CHIP RIPPLE (M3 feel) ─── */
 document.querySelectorAll('.chip').forEach(chip => {
-  chip.addEventListener('mousedown', function(e) {
+  chip.addEventListener('pointerdown', function(e) {
     const r = document.createElement('span');
     r.style.cssText = `
       position:absolute;width:6px;height:6px;border-radius:50%;
