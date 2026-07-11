@@ -170,7 +170,8 @@ body {
   font-size: 22px;
   transition:
     transform var(--dt2) var(--spring),
-    background-color var(--dt1) var(--standard);
+    background-color var(--dt1) var(--standard),
+    box-shadow var(--dt1) var(--standard);
 }
 .icon-btn:active { transform: scale(0.88) !important; }
 
@@ -288,13 +289,27 @@ main {
   background-color: var(--primary-container);
   color: var(--on-primary-container);
 }
-.ctrl-btn.theme-ctrl:hover { transform: scale(1.12) rotate(20deg); }
+.ctrl-btn.theme-ctrl.theme-kick {
+  animation: theme-control-kick 420ms var(--spring) both;
+}
+@keyframes theme-control-kick {
+  0% { transform: scale(1); }
+  45% { transform: scale(0.9) rotate(18deg); }
+  75% { transform: scale(1.08) rotate(-4deg); }
+  100% { transform: scale(1) rotate(0); }
+}
 
 .ctrl-btn.dark-ctrl {
   background-color: var(--cnt-high);
   color: var(--on-surface-var);
 }
-.ctrl-btn.dark-ctrl:hover { transform: scale(1.12); }
+@media (hover: hover) {
+  .ctrl-btn.theme-ctrl:hover {
+    transform: none;
+    box-shadow: 0 0 0 7px hsl(var(--h), calc(var(--c) * 0.55), 55%, 0.12);
+  }
+  .ctrl-btn.dark-ctrl:hover { transform: scale(1.12); }
+}
 
 /* Theme name label in rail */
 .theme-name-label {
@@ -1556,11 +1571,11 @@ main > section:not(#hero) > .sec-head::after {
   letter-spacing: -0.08em;
   pointer-events: none;
 }
-#experience > .sec-head::after { content: '01'; }
-#projects > .sec-head::after { content: '02'; }
-#skills > .sec-head::after { content: '03'; }
-#education > .sec-head::after { content: '04'; }
-#achievements > .sec-head::after { content: '05'; }
+#experience > .sec-head::after { content: '00'; }
+#projects > .sec-head::after { content: '01'; }
+#skills > .sec-head::after { content: '02'; }
+#education > .sec-head::after { content: '03'; }
+#achievements > .sec-head::after { content: '04'; }
 
 .sec-intro {
   max-width: 610px;
@@ -1920,14 +1935,6 @@ main > section:not(#hero) > .sec-head::after {
   #education .edu-card:nth-child(2) .edu-icon { background: var(--secondary-container); color: var(--on-secondary-container); }
   #education .edu-card:nth-child(3) .edu-icon { background: var(--tertiary-container); color: var(--on-tertiary-container); }
 
-  /* Recognition uses alternating alignment instead of nine identical rows. */
-  #achievements .ach-grid { justify-items: stretch; }
-  #achievements .ach-item:first-child { width: 96%; justify-self: start; }
-  #achievements .ach-item:nth-child(2) { width: 92%; justify-self: end; }
-  #achievements .ach-item:nth-child(n + 3) { width: 94%; }
-  #achievements .ach-item:nth-child(odd):nth-child(n + 3) { justify-self: start; }
-  #achievements .ach-item:nth-child(even):nth-child(n + 3) { justify-self: end; }
-
   .cp-row {
     width: 100%;
     flex-direction: column;
@@ -1950,53 +1957,6 @@ main > section:not(#hero) > .sec-head::after {
   #projects .proj-card:active,
   .cp-card:active,
   .cert-card:active { transform: scale(0.985); }
-}
-
-/* Two-column project/certification bento when a phone has enough width. */
-@media (min-width: 400px) and (max-width: 768px) {
-  #projects .projects-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-  #projects .proj-card:nth-child(1),
-  #projects .proj-card:nth-child(4),
-  #projects .proj-card:nth-child(7) { grid-column: 1 / -1; }
-  #projects .proj-card:nth-child(2),
-  #projects .proj-card:nth-child(3),
-  #projects .proj-card:nth-child(5),
-  #projects .proj-card:nth-child(6) {
-    grid-column: span 1;
-    min-height: 260px;
-    padding: 20px;
-  }
-  #projects .proj-card:nth-child(2) .proj-desc,
-  #projects .proj-card:nth-child(3) .proj-desc,
-  #projects .proj-card:nth-child(5) .proj-desc,
-  #projects .proj-card:nth-child(6) .proj-desc { display: none; }
-  #projects .proj-card:nth-child(2) .tag:nth-child(n + 3),
-  #projects .proj-card:nth-child(3) .tag:nth-child(n + 3),
-  #projects .proj-card:nth-child(5) .tag:nth-child(n + 3),
-  #projects .proj-card:nth-child(6) .tag:nth-child(n + 3) { display: none; }
-  #projects .proj-card:nth-child(3) { background: var(--primary-container); }
-  #projects .proj-card:nth-child(5) { background: var(--secondary-container); }
-  #projects .proj-card:nth-child(6) { background: var(--tertiary-container); }
-  #projects .proj-card:nth-child(2) .proj-icon-row,
-  #projects .proj-card:nth-child(3) .proj-icon-row,
-  #projects .proj-card:nth-child(5) .proj-icon-row,
-  #projects .proj-card:nth-child(6) .proj-icon-row { align-items: center; }
-  #projects .proj-card:nth-child(2) .proj-arrow,
-  #projects .proj-card:nth-child(3) .proj-arrow,
-  #projects .proj-card:nth-child(5) .proj-arrow,
-  #projects .proj-card:nth-child(6) .proj-arrow { width: 32px; height: 32px; }
-
-  .certifications-block .certs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-  .certifications-block .cert-card { min-width: 0; padding: 16px; align-items: flex-start; }
-}
-
-/* Narrow phones keep one readable column but use alternating insets and shapes. */
-@media (max-width: 399px) {
-  #projects .proj-card:nth-child(n + 2) { width: 94%; }
-  #projects .proj-card:nth-child(even) { justify-self: start; border-radius: 24px 8px 24px 24px; }
-  #projects .proj-card:nth-child(odd):not(:first-child) { justify-self: end; border-radius: 8px 24px 24px 24px; }
-  .certifications-block .cert-card:nth-child(even) { width: 94%; margin-left: auto; }
-  .certifications-block .cert-card:nth-child(odd) { width: 94%; }
 }
 
 /* Interaction semantics: static containers, animated details; linked cards may move. */
@@ -2063,4 +2023,663 @@ main > section:not(#hero) > .sec-head::after {
   #achievements .ach-item:hover .ach-emoji,
   .pub-item:hover .pub-num { filter: none; }
   .os-card:hover .os-stat-val { text-shadow: none; }
+}
+
+/* ═══════════════════════════════════════
+   MOBILE PORTFOLIO THREAD
+   Conversation rhythm with distinct message types; desktop is unchanged.
+═══════════════════════════════════════ */
+@media (max-width: 768px) {
+  .tbar-identity { display: flex; align-items: center; gap: 10px; }
+  .tbar-copy { display: grid; line-height: 1.05; }
+  .tbar-copy small {
+    margin-top: 4px;
+    color: var(--on-surface-var);
+    font-size: 0.61rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  main > section:not(#hero) { padding-inline: 16px; }
+  main > section:not(#hero) > .sec-head { margin-bottom: 42px; }
+  main > section:not(#hero) > .sec-head .sec-eyebrow {
+    width: fit-content;
+    padding: 6px 11px;
+    border-radius: 999px;
+    background: var(--cnt-high);
+    letter-spacing: 0.1em;
+  }
+  main > section:not(#hero) > .sec-head .sec-eyebrow::before { display: none; }
+
+  /* Roles read as a small exchange, not an automatic left/right pattern. */
+  #experience .timeline { gap: 20px; }
+  #experience .t-item,
+  #experience .t-item:first-child,
+  #experience .t-item:nth-child(2),
+  #experience .t-item:nth-child(3) {
+    width: 96%;
+    padding: 0 0 0 44px;
+    justify-self: start;
+  }
+  #experience .t-item:nth-child(2) { width: 88%; }
+  #experience .t-item:nth-child(3) {
+    padding: 0 44px 0 0;
+    justify-self: end;
+  }
+  #experience .t-dot,
+  #experience .t-item:not(:first-child) .t-dot {
+    top: 0;
+    right: auto;
+    left: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+  }
+  #experience .t-item:nth-child(3) .t-dot { right: 0; left: auto; }
+  #experience .t-card,
+  #experience .t-item:first-child .t-card,
+  #experience .t-item:not(:first-child) .t-card {
+    padding: 22px;
+    border: 0;
+    border-radius: 7px 26px 26px 26px;
+    background: var(--primary-container);
+  }
+  #experience .t-item:nth-child(3) .t-card {
+    border-radius: 26px 7px 26px 26px;
+    background: var(--tertiary-container);
+  }
+  #experience .t-item:nth-child(3) .exp-company { color: var(--on-tertiary-container); }
+
+  /* Project links become rich previews in one vertical thread. */
+  #projects .projects-grid { grid-template-columns: 1fr; gap: 16px; }
+  #projects .proj-card:nth-child(n) {
+    grid-column: 1;
+    width: 94%;
+    min-height: 0;
+    padding: 23px;
+    justify-self: start;
+    border-radius: 7px 26px 26px 26px;
+  }
+  #projects .proj-card:nth-child(1) {
+    width: 100%;
+    min-height: 330px;
+    padding: 28px;
+    border-radius: 7px 30px 30px 30px;
+  }
+  #projects .proj-card:nth-child(n) .proj-desc {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+  }
+  #projects .proj-card:nth-child(n) .tag:nth-child(n) { display: inline-flex; }
+  #projects .proj-card:nth-child(3) { background: var(--primary-container); }
+  #projects .proj-card:nth-child(5) { background: var(--secondary-container); }
+  #projects .proj-card:nth-child(6) { background: var(--tertiary-container); }
+
+  /* Skill groups use deliberate runs so the thread feels written, not generated. */
+  #skills .skills-grid { gap: 16px; }
+  #skills .skill-grp:nth-child(n) {
+    width: 94%;
+    padding: 22px;
+    justify-self: start;
+    border: 0;
+    border-radius: 7px 26px 26px 26px;
+    background: var(--cnt-low);
+  }
+  #skills .skill-grp:nth-child(1) { width: 100%; background: var(--primary-container); }
+  #skills .skill-grp:nth-child(2) { width: 84%; }
+  #skills .skill-grp:nth-child(3) {
+    width: 94%;
+    justify-self: end;
+    border-radius: 26px 7px 26px 26px;
+    background: var(--tertiary-container);
+  }
+  #skills .skill-grp:nth-child(4) {
+    width: 82%;
+    justify-self: end;
+    border-radius: 26px 7px 26px 26px;
+  }
+  #skills .skill-grp:nth-child(5) { width: 100%; background: var(--secondary-container); }
+
+  /* Education is a compact system-message thread with three senders. */
+  #education .edu-stack { gap: 18px; }
+  #education .edu-card:nth-child(n) {
+    width: 94%;
+    min-height: 0;
+    padding: 20px;
+    justify-self: start;
+    border: 0;
+    border-radius: 7px 24px 24px 24px;
+    background: var(--cnt-low);
+  }
+  #education .edu-card:first-child { width: 100%; background: var(--primary-container); }
+  #education .edu-card:nth-child(2) { width: 86%; background: var(--secondary-container); }
+  #education .edu-card:nth-child(3) {
+    width: 94%;
+    justify-self: end;
+    border-radius: 24px 7px 24px 24px;
+    background: var(--tertiary-container);
+  }
+
+  /* Recognition bubbles preserve hierarchy without becoming a uniform list. */
+  #achievements .ach-grid { grid-template-columns: 1fr; gap: 12px; }
+  #achievements .ach-item:nth-child(n) {
+    width: 94%;
+    min-height: 0;
+    padding: 18px 20px;
+    justify-self: start;
+    border: 0;
+    border-radius: 7px 24px 24px 24px;
+    background: var(--cnt-low);
+  }
+  #achievements .ach-item:first-child { width: 100%; margin-bottom: 0; background: var(--primary-container); }
+
+  /* Sub-threads keep vertical scrolling and use their own bubble language. */
+  .more-block { margin-top: 66px; }
+  .more-block > .sec-head .sec-eyebrow {
+    display: inline-flex;
+    padding: 6px 11px;
+    border-radius: 999px;
+    background: var(--cnt-high);
+  }
+  .cp-row { gap: 12px; }
+  .cp-card,
+  .cp-card:nth-child(2),
+  .cp-card:nth-child(3) {
+    width: 94%;
+    padding: 20px 22px;
+    align-self: flex-start;
+    border-radius: 7px 24px 24px 24px;
+  }
+  .cp-card:nth-child(even) {
+    align-self: flex-end;
+    border-radius: 24px 7px 24px 24px;
+  }
+  .publications-block .pub-stack { gap: 12px; }
+  .publications-block .pub-item {
+    width: 94%;
+    padding: 20px;
+    border-radius: 7px 24px 24px 24px;
+  }
+  .publications-block .pub-item:last-child {
+    margin-left: auto;
+    border-radius: 24px 7px 24px 24px;
+  }
+  .certifications-block .certs-grid { grid-template-columns: 1fr; gap: 12px; }
+  .certifications-block .cert-card:nth-child(n) {
+    width: 94%;
+    padding: 17px 18px;
+    margin: 0;
+    justify-self: start;
+    border-radius: 7px 22px 22px 22px;
+    background: var(--cnt-low);
+  }
+  .certifications-block .cert-card:nth-child(even) {
+    justify-self: end;
+    border-radius: 22px 7px 22px 22px;
+  }
+  .open-source-block .os-card {
+    width: 100%;
+    border-radius: 7px 28px 28px 28px;
+  }
+  .open-source-block .os-note {
+    width: 90%;
+    margin: 12px 0 0 auto;
+    padding: 18px 20px;
+    border: 0;
+    border-radius: 24px 7px 24px 24px;
+    background: var(--cnt-low);
+  }
+}
+
+/* Adjacent messages can share one compound bubble; the page remains one column. */
+@media (max-width: 768px) {
+  #projects .projects-grid { grid-template-columns: 1fr; gap: 16px; }
+  #projects .proj-card:nth-child(2),
+  #projects .proj-card:nth-child(3) {
+    width: 94%;
+    justify-self: end;
+    background: var(--cnt-low);
+  }
+  #projects .proj-card:nth-child(2) {
+    margin-bottom: -16px;
+    border-bottom: 0;
+    border-radius: 26px 7px 0 0;
+  }
+  #projects .proj-card:nth-child(3) {
+    border-radius: 0 0 26px 26px;
+    box-shadow: inset 0 1px var(--outline-var);
+  }
+  #projects .proj-card:nth-child(5),
+  #projects .proj-card:nth-child(6) {
+    width: 94%;
+    justify-self: start;
+    background: var(--cnt-low);
+  }
+  #projects .proj-card:nth-child(5) {
+    margin-bottom: -16px;
+    border-bottom: 0;
+    border-radius: 7px 26px 0 0;
+  }
+  #projects .proj-card:nth-child(6) {
+    border-radius: 0 0 26px 26px;
+    box-shadow: inset 0 1px var(--outline-var);
+  }
+  #projects .proj-card:nth-child(2)::after,
+  #projects .proj-card:nth-child(5)::after { display: none; }
+  #projects .proj-card:nth-child(2) .proj-desc,
+  #projects .proj-card:nth-child(3) .proj-desc,
+  #projects .proj-card:nth-child(5) .proj-desc,
+  #projects .proj-card:nth-child(6) .proj-desc { -webkit-line-clamp: 2; }
+  #projects .proj-card:nth-child(2) .tag:nth-child(n + 3),
+  #projects .proj-card:nth-child(3) .tag:nth-child(n + 3),
+  #projects .proj-card:nth-child(5) .tag:nth-child(n + 3),
+  #projects .proj-card:nth-child(6) .tag:nth-child(n + 3) { display: none; }
+
+  #projects .proj-card:nth-child(4) {
+    width: 84%;
+    justify-self: start;
+    border-radius: 7px 26px 26px 26px;
+  }
+  #projects .proj-card:nth-child(7) {
+    width: 90%;
+    justify-self: end;
+    border-radius: 26px 7px 26px 26px;
+  }
+
+  /* Achievements form uneven topic clusters instead of a left/right ladder. */
+  #achievements .ach-grid { grid-template-columns: 1fr; }
+  #achievements .ach-item:nth-child(n) {
+    width: 94%;
+    margin: 0;
+    justify-self: start;
+    border: 0;
+    border-radius: 7px 24px 24px 24px;
+    background: var(--cnt-low);
+  }
+  #achievements .ach-item:nth-child(1),
+  #achievements .ach-item:nth-child(2) {
+    width: 100%;
+    background: var(--primary-container);
+  }
+  #achievements .ach-item:nth-child(1) {
+    margin-bottom: -12px;
+    border-radius: 7px 24px 0 0;
+  }
+  #achievements .ach-item:nth-child(2) {
+    border-top: 1px solid var(--outline-var);
+    border-radius: 0 0 24px 24px;
+  }
+  #achievements .ach-item:nth-child(3),
+  #achievements .ach-item:nth-child(4) {
+    width: 90%;
+    justify-self: end;
+    background: var(--secondary-container);
+  }
+  #achievements .ach-item:nth-child(3) {
+    margin-bottom: -12px;
+    border-radius: 24px 7px 0 0;
+  }
+  #achievements .ach-item:nth-child(4) {
+    border-top: 1px solid var(--outline-var);
+    border-radius: 0 0 24px 24px;
+  }
+  #achievements .ach-item:nth-child(5) {
+    width: 80%;
+    justify-self: end;
+    border-radius: 24px 7px 24px 24px;
+    background: var(--tertiary-container);
+  }
+  #achievements .ach-item:nth-child(6),
+  #achievements .ach-item:nth-child(7),
+  #achievements .ach-item:nth-child(8) { width: 96%; }
+  #achievements .ach-item:nth-child(6),
+  #achievements .ach-item:nth-child(7) {
+    margin-bottom: -12px;
+    border-radius: 7px 24px 0 0;
+  }
+  #achievements .ach-item:nth-child(7),
+  #achievements .ach-item:nth-child(8) {
+    border-top: 1px solid var(--outline-var);
+    border-radius: 0;
+  }
+  #achievements .ach-item:nth-child(8) { border-radius: 0 0 24px 24px; }
+  #achievements .ach-item:nth-child(9) {
+    width: 86%;
+    justify-self: end;
+    border-radius: 24px 7px 24px 24px;
+    background: var(--secondary-container);
+  }
+
+  /* One external reaction identifies each achievement conversation. */
+  #achievements .ach-item:nth-child(n) { position: relative; }
+  #achievements .ach-item .ach-emoji { display: none; }
+  #achievements .ach-item:nth-child(1) .ach-emoji,
+  #achievements .ach-item:nth-child(3) .ach-emoji,
+  #achievements .ach-item:nth-child(5) .ach-emoji,
+  #achievements .ach-item:nth-child(6) .ach-emoji,
+  #achievements .ach-item:nth-child(9) .ach-emoji {
+    position: absolute;
+    top: 12px;
+    display: grid;
+    width: 34px;
+    height: 34px;
+    margin: 0;
+    place-items: center;
+    border-radius: 12px 12px 12px 4px;
+    background: var(--cnt-high);
+    color: var(--on-surface-var);
+    font-size: 1.05rem;
+    line-height: 1;
+  }
+  #achievements .ach-item:nth-child(1),
+  #achievements .ach-item:nth-child(2) {
+    width: calc(100% - 42px);
+    margin-left: 42px;
+  }
+  #achievements .ach-item:nth-child(1) { margin-bottom: -12px; }
+  #achievements .ach-item:nth-child(3),
+  #achievements .ach-item:nth-child(4) {
+    width: calc(100% - 42px);
+    margin-right: 42px;
+  }
+  #achievements .ach-item:nth-child(3) { margin-bottom: -12px; }
+  #achievements .ach-item:nth-child(5) {
+    width: 76%;
+    margin-right: 42px;
+  }
+  #achievements .ach-item:nth-child(6),
+  #achievements .ach-item:nth-child(7),
+  #achievements .ach-item:nth-child(8) {
+    width: calc(100% - 42px);
+    margin-left: 42px;
+  }
+  #achievements .ach-item:nth-child(6),
+  #achievements .ach-item:nth-child(7) { margin-bottom: -12px; }
+  #achievements .ach-item:nth-child(9) {
+    width: 82%;
+    margin-right: 42px;
+  }
+  #achievements .ach-item:nth-child(1) .ach-emoji,
+  #achievements .ach-item:nth-child(6) .ach-emoji { left: -42px; }
+  #achievements .ach-item:nth-child(3) .ach-emoji,
+  #achievements .ach-item:nth-child(5) .ach-emoji,
+  #achievements .ach-item:nth-child(9) .ach-emoji {
+    right: -42px;
+    border-radius: 12px 12px 4px 12px;
+  }
+  #achievements .ach-item:nth-child(1) .ach-emoji,
+  #achievements .ach-item:nth-child(6) .ach-emoji {
+    background: var(--primary-container);
+    color: var(--on-primary-container);
+  }
+  #achievements .ach-item:nth-child(3) .ach-emoji,
+  #achievements .ach-item:nth-child(9) .ach-emoji {
+    background: var(--secondary-container);
+    color: var(--on-secondary-container);
+  }
+  #achievements .ach-item:nth-child(5) .ach-emoji {
+    background: var(--tertiary-container);
+    color: var(--on-tertiary-container);
+  }
+
+  .cp-card:nth-child(2),
+  .cp-card:nth-child(3) {
+    width: 94%;
+    align-self: flex-end;
+    background: var(--secondary-container);
+    color: var(--on-secondary-container);
+  }
+  .cp-card:nth-child(2) {
+    margin-bottom: -12px;
+    border-radius: 24px 7px 0 0;
+  }
+  .cp-card:nth-child(3) {
+    border-top: 1px solid var(--outline-var);
+    border-radius: 0 0 24px 24px;
+  }
+
+  .certifications-block .certs-grid { grid-template-columns: 1fr; gap: 12px; }
+  .certifications-block .cert-card:nth-child(n) { width: 94%; background: var(--cnt-low); }
+  .certifications-block .cert-card:nth-child(1),
+  .certifications-block .cert-card:nth-child(2) { width: 94%; justify-self: start; }
+  .certifications-block .cert-card:nth-child(3),
+  .certifications-block .cert-card:nth-child(4) { width: 84%; justify-self: start; }
+  .certifications-block .cert-card:nth-child(5),
+  .certifications-block .cert-card:nth-child(6) { width: 92%; justify-self: end; }
+  .certifications-block .cert-card:nth-child(odd) {
+    margin-bottom: -12px;
+    border-bottom: 0;
+    border-radius: 7px 22px 0 0;
+  }
+  .certifications-block .cert-card:nth-child(even) {
+    border-radius: 0 0 22px 22px;
+    box-shadow: inset 0 1px var(--outline-var);
+  }
+}
+
+/* Mobile chat identity: every conversation gets one marker in a shared gutter. */
+@media (max-width: 768px) {
+  #projects .proj-card,
+  #skills .skill-grp,
+  #education .edu-card,
+  .cp-card,
+  .publications-block .pub-item,
+  .certifications-block .cert-card,
+  .open-source-block .os-card,
+  .open-source-block .os-note { position: relative; }
+
+  #projects .proj-icon,
+  #skills .sg-title > .material-symbols-rounded,
+  #education .edu-icon,
+  .publications-block .pub-num,
+  .certifications-block .cert-icon,
+  .cp-card::before,
+  .open-source-block .os-card::before {
+    position: absolute;
+    top: 12px;
+    z-index: 2;
+    display: grid;
+    width: 34px;
+    height: 34px;
+    margin: 0;
+    padding: 0;
+    place-items: center;
+    border: 0;
+    border-radius: 12px 12px 12px 4px;
+    background: var(--cnt-high);
+    color: var(--on-surface-var);
+    font-size: 1rem;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  /* Project previews: one icon for each standalone or compound link group. */
+  #projects .proj-card { overflow: visible; }
+  #projects .proj-card:nth-child(1),
+  #projects .proj-card:nth-child(4),
+  #projects .proj-card:nth-child(5),
+  #projects .proj-card:nth-child(6) {
+    width: calc(100% - 42px);
+    margin-left: 42px;
+  }
+  #projects .proj-card:nth-child(2),
+  #projects .proj-card:nth-child(3),
+  #projects .proj-card:nth-child(7) {
+    width: calc(100% - 42px);
+    margin-right: 42px;
+  }
+  #projects .proj-card:nth-child(1) .proj-icon,
+  #projects .proj-card:nth-child(4) .proj-icon,
+  #projects .proj-card:nth-child(5) .proj-icon { left: -42px; }
+  #projects .proj-card:nth-child(2) .proj-icon,
+  #projects .proj-card:nth-child(7) .proj-icon {
+    right: -42px;
+    border-radius: 12px 12px 4px 12px;
+  }
+  #projects .proj-card:nth-child(3) .proj-icon,
+  #projects .proj-card:nth-child(6) .proj-icon { display: none; }
+
+  /* Skill and education messages keep their existing icons as avatars. */
+  #skills .skill-grp:nth-child(1),
+  #skills .skill-grp:nth-child(5),
+  #education .edu-card:nth-child(1),
+  #education .edu-card:nth-child(2) {
+    width: calc(100% - 42px);
+    margin-left: 42px;
+  }
+  #skills .skill-grp:nth-child(2) {
+    width: calc(100% - 64px);
+    margin-left: 42px;
+  }
+  #skills .skill-grp:nth-child(3),
+  #education .edu-card:nth-child(3) {
+    width: calc(100% - 42px);
+    margin-right: 42px;
+  }
+  #skills .skill-grp:nth-child(4) {
+    width: calc(100% - 64px);
+    margin-right: 42px;
+  }
+  #skills .skill-grp:nth-child(1) .sg-title > .material-symbols-rounded,
+  #skills .skill-grp:nth-child(2) .sg-title > .material-symbols-rounded,
+  #skills .skill-grp:nth-child(5) .sg-title > .material-symbols-rounded,
+  #education .edu-card:nth-child(1) .edu-icon,
+  #education .edu-card:nth-child(2) .edu-icon { left: -42px; }
+  #skills .skill-grp:nth-child(3) .sg-title > .material-symbols-rounded,
+  #skills .skill-grp:nth-child(4) .sg-title > .material-symbols-rounded,
+  #education .edu-card:nth-child(3) .edu-icon {
+    right: -42px;
+    border-radius: 12px 12px 4px 12px;
+  }
+  #skills .sg-title { position: static; }
+
+  /* Competitive profiles form one standalone message and one compound reply. */
+  .cp-card::before {
+    content: 'terminal';
+    font-family: 'Material Symbols Rounded';
+    font-size: 20px;
+    font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+  }
+  .cp-card:nth-child(1) {
+    width: calc(100% - 42px);
+    margin-left: 42px;
+  }
+  .cp-card:nth-child(1)::before {
+    left: -42px;
+    background: var(--primary-container);
+    color: var(--on-primary-container);
+  }
+  .cp-card:nth-child(2),
+  .cp-card:nth-child(3) {
+    width: calc(100% - 42px);
+    margin-right: 42px;
+  }
+  .cp-card:nth-child(2)::before {
+    right: -42px;
+    content: 'leaderboard';
+    border-radius: 12px 12px 4px 12px;
+    background: var(--secondary-container);
+    color: var(--on-secondary-container);
+  }
+  .cp-card:nth-child(3)::before { display: none; }
+
+  /* Publication numbers and certification marks become thread identities. */
+  .publications-block .pub-item:first-child,
+  .publications-block .pub-item:last-child { width: calc(100% - 42px); }
+  .publications-block .pub-item:first-child { margin-left: 42px; }
+  .publications-block .pub-item:last-child { margin-right: 42px; }
+  .publications-block .pub-item:first-child .pub-num { left: -42px; }
+  .publications-block .pub-item:last-child .pub-num {
+    right: -42px;
+    border-radius: 12px 12px 4px 12px;
+  }
+  .certifications-block .cert-card:nth-child(1),
+  .certifications-block .cert-card:nth-child(2) {
+    width: calc(100% - 42px);
+    margin-left: 42px;
+  }
+  .certifications-block .cert-card:nth-child(3),
+  .certifications-block .cert-card:nth-child(4) {
+    width: calc(100% - 64px);
+    margin-left: 42px;
+  }
+  .certifications-block .cert-card:nth-child(5),
+  .certifications-block .cert-card:nth-child(6) {
+    width: calc(100% - 42px);
+    margin-right: 42px;
+  }
+  .certifications-block .cert-card:nth-child(1) .cert-icon,
+  .certifications-block .cert-card:nth-child(3) .cert-icon { left: -42px; }
+  .certifications-block .cert-card:nth-child(5) .cert-icon {
+    right: -42px;
+    border-radius: 12px 12px 4px 12px;
+  }
+  .certifications-block .cert-card:nth-child(even) .cert-icon { display: none; }
+
+  /* Stats and contribution detail are one open-source conversation. */
+  .open-source-block .os-card,
+  .open-source-block .os-note {
+    width: calc(100% - 42px);
+    margin-left: 42px;
+  }
+  .open-source-block .os-card { border-radius: 7px 28px 0 0; }
+  .open-source-block .os-card::before {
+    left: -42px;
+    content: 'code';
+    background: var(--primary-container);
+    color: var(--on-primary-container);
+    font-family: 'Material Symbols Rounded';
+    font-size: 20px;
+    font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+  }
+  .open-source-block .os-note {
+    margin-top: 0;
+    border-top: 1px solid var(--outline-var);
+    border-radius: 0 0 28px 28px;
+  }
+
+  /* Contact actions form a balanced, theme-aware attachment tray. */
+  #hero .hero-ctas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: min(100%, 360px);
+    gap: 10px;
+  }
+  #hero .hero-ctas .btn {
+    width: 100%;
+    min-width: 0;
+    padding-inline: 13px;
+    justify-content: flex-start;
+    border: 0;
+    border-radius: 16px;
+    background: var(--cnt-low);
+    color: var(--on-surface);
+    white-space: nowrap;
+  }
+  #hero .hero-ctas .btn .material-symbols-rounded {
+    display: grid;
+    width: 28px;
+    height: 28px;
+    place-items: center;
+    border-radius: 10px;
+  }
+  #hero .hero-ctas .btn:nth-child(1) .material-symbols-rounded {
+    background: var(--primary-container);
+    color: var(--on-primary-container);
+  }
+  #hero .hero-ctas .btn:nth-child(2) .material-symbols-rounded {
+    background: var(--secondary-container);
+    color: var(--on-secondary-container);
+  }
+  #hero .hero-ctas .btn:nth-child(3) .material-symbols-rounded {
+    background: var(--tertiary-container);
+    color: var(--on-tertiary-container);
+  }
+  #hero .hero-ctas .btn:nth-child(4) .material-symbols-rounded {
+    background: var(--primary-container);
+    color: var(--on-primary-container);
+  }
 }

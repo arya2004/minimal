@@ -74,7 +74,7 @@ function applyTheme(index, { showToast = true } = {}) {
     }
   });
   if (showToast) {
-    showSnackbar(`${t.name} palette`);
+    showSnackbar(t.name);
     playThemeShift();
   }
   updateFavicon();
@@ -98,6 +98,14 @@ function cycleTheme() {
   currentTheme = (currentTheme + 1) % THEMES.length;
   applyTheme(currentTheme);
   haptic([8, 30, 8]);
+}
+
+function kickThemeControl(control) {
+  if (reducedMotion.matches) return;
+  control.classList.remove('theme-kick');
+  void control.offsetWidth;
+  control.classList.add('theme-kick');
+  control.addEventListener('animationend', () => control.classList.remove('theme-kick'), { once: true });
 }
 
 function toggleDark() {
@@ -178,7 +186,10 @@ function showSnackbar(text) {
 /* ─── ATTACH CONTROLS ─── */
 ['rail-theme-btn', 'top-theme-btn'].forEach(id => {
   const el = document.getElementById(id);
-  if (el) el.addEventListener('click', cycleTheme);
+  if (el) el.addEventListener('click', event => {
+    cycleTheme();
+    kickThemeControl(event.currentTarget);
+  });
 });
 ['rail-dark-btn', 'top-dark-btn'].forEach(id => {
   const el = document.getElementById(id);
