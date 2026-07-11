@@ -1,0 +1,336 @@
+/*
+ * Responsive contract
+ * -------------------
+ * Base/desktop components live in styles.css. This file owns viewport adaptation
+ * and is loaded last so each breakpoint has one predictable override surface.
+ *
+ * Compact phone: <= 420px
+ * Phone / small tablet: <= 768px
+ * Tablet: 769px - 1023px
+ * Laptop: 1024px - 1279px
+ * Wide desktop: >= 1280px
+ */
+
+:root {
+  --content-max: 1120px;
+}
+
+html {
+  scroll-padding-top: 24px;
+}
+
+section {
+  scroll-margin-top: 24px;
+}
+
+main:focus {
+  outline: none;
+}
+
+.proj-card,
+.skill-grp,
+.edu-card,
+.ach-item,
+.cert-card,
+.pub-item,
+.t-item {
+  min-width: 0;
+}
+
+/* Prevent icon ligature names from creating overflow before the webfont resolves. */
+.material-symbols-rounded {
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+.material-symbols-rounded:not(.ach-emoji) {
+  max-width: 1.15em;
+}
+
+#hero .hero-ctas .material-symbols-rounded,
+#skills .sg-title > .material-symbols-rounded {
+  max-width: none;
+}
+
+#hero .hero-ctas .material-symbols-rounded {
+  flex: 0 0 28px;
+}
+
+.cp-card::before,
+.open-source-block .os-card::before {
+  overflow: hidden;
+}
+
+.proj-name,
+.proj-sub,
+.cert-name,
+.pub-title,
+.exp-company,
+.edu-school {
+  overflow-wrap: anywhere;
+}
+
+.chip {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-ctas .btn {
+  min-height: 44px;
+}
+
+.chip-ripple {
+  position: absolute;
+  left: var(--ripple-x);
+  top: var(--ripple-y);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.25;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  animation: chip-ripple 420ms ease-out forwards;
+}
+
+@keyframes chip-ripple {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(22);
+  }
+}
+
+/* Phone and small tablet: retain the approved chat-thread composition. */
+@media (max-width: 768px) {
+  html {
+    scroll-padding-top: calc(var(--tbar-h) + 16px);
+  }
+
+  section {
+    scroll-margin-top: calc(var(--tbar-h) + 16px);
+  }
+
+  main > section:not(#hero) {
+    padding-inline: clamp(16px, 4.5vw, 28px);
+  }
+
+  #hero {
+    padding-inline: clamp(20px, 5vw, 30px);
+  }
+
+  .hero-name {
+    text-wrap: balance;
+  }
+
+  .hero-pill {
+    max-width: 100%;
+    line-height: 1.3;
+  }
+
+  #projects .proj-card:nth-child(n) .proj-desc {
+    display: block;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+  }
+
+  .bottom-nav {
+    padding-right: max(8px, env(safe-area-inset-right));
+    padding-left: max(8px, env(safe-area-inset-left));
+  }
+
+  .bottom-nav .nav-item {
+    min-width: 0;
+  }
+
+  .top-app-bar {
+    padding-right: max(16px, env(safe-area-inset-right));
+    padding-left: max(16px, env(safe-area-inset-left));
+  }
+
+  .fab {
+    right: max(16px, env(safe-area-inset-right));
+  }
+}
+
+/* Compact phones need type that fits rather than being clipped by body overflow. */
+@media (max-width: 420px) {
+  #hero {
+    padding-top: clamp(42px, 10vw, 56px);
+  }
+
+  .hero-name {
+    font-size: clamp(3rem, 15vw, 3.95rem);
+    letter-spacing: -0.065em;
+  }
+
+  .hero-role {
+    font-size: 0.98rem;
+  }
+
+  .hero-pill {
+    padding-right: 12px;
+    font-size: 0.72rem;
+  }
+
+  #hero .hero-ctas {
+    width: 100%;
+  }
+
+  #hero .hero-ctas .btn {
+    padding-inline: 9px;
+    font-size: 0.875rem;
+  }
+
+  .hero-stat {
+    padding-right: 12px;
+  }
+
+  .stat-val {
+    font-size: clamp(1.65rem, 8vw, 2rem);
+  }
+}
+
+@media (max-width: 360px) {
+  .bottom-nav .nav-pill,
+  .bottom-nav .nav-item.active .nav-pill {
+    width: 54px;
+  }
+
+  .bottom-nav .nav-label-text {
+    font-size: 0.58rem;
+  }
+}
+
+/* Tablet: keep the rail, reduce empty hero space, and use a 1+2 education bento. */
+@media (min-width: 769px) and (max-width: 1023px) {
+  html {
+    scroll-padding-top: 32px;
+  }
+
+  section {
+    padding: clamp(68px, 8vw, 82px) clamp(36px, 5vw, 52px);
+    scroll-margin-top: 32px;
+  }
+
+  #hero {
+    min-height: clamp(680px, 82svh, 860px);
+    padding-top: clamp(72px, 9svh, 104px);
+  }
+
+  .hero-name {
+    font-size: clamp(4.4rem, 10vw, 6.3rem);
+    text-wrap: balance;
+  }
+
+  #education .edu-stack {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 26px 30px;
+  }
+
+  #education .edu-card:first-child {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  #education .edu-card:nth-child(n + 2) {
+    grid-column: span 1;
+  }
+
+  .more-block {
+    grid-template-columns: minmax(150px, 0.32fr) minmax(0, 1fr);
+  }
+}
+
+/* Laptop: protect content density on narrower desktop windows. */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  section {
+    padding-right: clamp(48px, 5vw, 64px);
+    padding-left: clamp(48px, 5vw, 64px);
+  }
+
+  #projects .proj-card {
+    padding: clamp(26px, 3vw, 34px);
+  }
+
+  #skills .skills-grid {
+    column-gap: clamp(30px, 4vw, 42px);
+  }
+}
+
+/* Wide screens gain breathing room without allowing unreadably long lines. */
+@media (min-width: 1280px) {
+  section {
+    width: min(100%, var(--content-max));
+  }
+
+  .sec-intro,
+  .hero-role {
+    text-wrap: pretty;
+  }
+}
+
+/* Short landscape devices should scroll naturally instead of forcing a fake viewport. */
+@media (max-width: 768px) and (max-height: 600px) {
+  #hero {
+    min-height: auto;
+    padding-top: 36px;
+  }
+
+  .hero-name {
+    font-size: clamp(3.2rem, 11vw, 4.4rem);
+  }
+
+  .hero-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .hero-stat:nth-child(n) {
+    padding: 14px 10px;
+    border-top: 0;
+    border-left: 1px solid var(--outline-var);
+  }
+
+  .hero-stat:first-child {
+    border-left: 0;
+    padding-left: 0;
+  }
+}
+
+@media print {
+  :root {
+    --rail-w: 0px;
+  }
+
+  .nav-rail,
+  .top-app-bar,
+  .bottom-nav,
+  .fab,
+  .snackbar,
+  .scroll-progress {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #111;
+  }
+
+  main,
+  footer {
+    margin-left: 0;
+  }
+
+  section {
+    max-width: none;
+    min-height: 0 !important;
+    padding: 32px 24px;
+    break-inside: avoid;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}

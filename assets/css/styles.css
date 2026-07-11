@@ -585,15 +585,19 @@ section {
 }
 .exp-list { display: flex; flex-direction: column; gap: 8px; }
 .exp-list li {
-  display: flex; gap: 10px;
+  position: relative;
+  display: block;
+  padding-left: 18px;
   font-size: 0.875rem; line-height: 1.65;
   color: var(--on-surface);
   text-align: justify;
 }
 .exp-list li::before {
   content: '◆';
+  position: absolute;
+  top: 0.48rem;
+  left: 0;
   color: var(--primary); font-size: 0.45rem;
-  margin-top: 7px; flex-shrink: 0;
 }
 
 .exp-brief {
@@ -1628,7 +1632,7 @@ main > section:not(#hero) > .sec-head::after {
   top: 20px;
   right: 0;
 }
-#experience .t-item:not(:first-child) .t-card:hover { transform: translateY(-3px); }
+#experience .t-item:not(:first-child) .t-card:hover { border-top-color: var(--primary); }
 
 /* Projects: asymmetric but still airy. */
 #projects .projects-grid {
@@ -1666,15 +1670,6 @@ main > section:not(#hero) > .sec-head::after {
   background: hsl(var(--h), 20%, 100%, 0.16);
   color: var(--on-primary);
 }
-#projects .proj-card:nth-child(3) .proj-desc,
-#projects .proj-card:nth-child(4) .proj-desc,
-#projects .proj-card:nth-child(5) .proj-desc {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
-  overflow: hidden;
-}
-
 /* Skills: staggered technical bands rather than a generic card wall. */
 #skills .skills-grid {
   grid-template-columns: repeat(12, minmax(0, 1fr));
