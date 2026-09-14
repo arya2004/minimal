@@ -2300,51 +2300,6 @@ main > section:not(#hero) > .sec-head::after {
   --on-primary: #171717;
 }
 
-/* Pure white light mode with theme-derived typography and accents. */
-:root:not([data-mode="dark"]) {
-  --primary: hsl(var(--h), calc(var(--c) * 0.68), 30%);
-  --on-primary: #fff;
-  --primary-container: hsl(var(--h), calc(var(--c) * 0.68), 92%);
-  --on-primary-container: hsl(var(--h), calc(var(--c) * 0.55), 19%);
-  --secondary: hsl(var(--h), calc(var(--c) * 0.42), 34%);
-  --secondary-container: hsl(var(--h), calc(var(--c) * 0.36), 95%);
-  --on-secondary-container: hsl(var(--h), calc(var(--c) * 0.40), 23%);
-  --tertiary: hsl(var(--h), calc(var(--c) * 0.32), 34%);
-  --tertiary-container: hsl(var(--h), calc(var(--c) * 0.28), 94%);
-  --on-tertiary-container: hsl(var(--h), calc(var(--c) * 0.32), 23%);
-  --bg: #fff;
-  --surface: #fff;
-  --surface-variant: hsl(var(--h), calc(var(--c) * 0.18), 95%);
-  --cnt-lowest: #fff;
-  --cnt-low: #fff;
-  --cnt: hsl(var(--h), calc(var(--c) * 0.20), 97%);
-  --cnt-high: hsl(var(--h), calc(var(--c) * 0.25), 94%);
-  --cnt-highest: hsl(var(--h), calc(var(--c) * 0.30), 91%);
-  --on-surface: hsl(var(--h), calc(var(--c) * 0.45), 19%);
-  --on-surface-var: hsl(var(--h), calc(var(--c) * 0.26), 33%);
-  --outline: hsl(var(--h), calc(var(--c) * 0.22), 48%);
-  --outline-var: hsl(var(--h), calc(var(--c) * 0.24), 84%);
-}
-:root[data-theme="canyon"]:not([data-mode="dark"]) { --primary: #a74725; --primary-container: #ffe5d6; }
-:root[data-theme="olive"]:not([data-mode="dark"]) { --primary: #365c49; --primary-container: #e1eddd; }
-:root[data-theme="fog"]:not([data-mode="dark"]) { --primary: #3f5e7c; --primary-container: #e3eefb; }
-:root[data-theme="obsidian"]:not([data-mode="dark"]) { --primary: #292929; --primary-container: #ececec; }
-[data-mode="light"] body { background-image: none; }
-[data-mode="light"] .hero-name .accent,
-[data-mode="light"] .sec-title { color: var(--primary); }
-[data-mode="light"] .hero-pill { background: #fff; border-color: var(--outline-var); color: var(--primary); }
-[data-mode="light"] .nav-brand { box-shadow: none; background: var(--primary); color: #fff; }
-[data-mode="light"] .nav-rail { background: #fff; }
-[data-mode="light"] .hero-ctas .btn-filled { background: var(--primary); color: #fff; }
-[data-mode="light"] #experience .t-item:first-child .t-card {
-  background: #fff;
-  border: 1px solid var(--outline-var);
-  border-top: 3px solid var(--primary);
-}
-[data-mode="light"] .skill-grp .chip,
-[data-mode="light"] .publications-block .pub-item,
-[data-mode="light"] .certifications-block .cert-card { background: #fff; border: 1px solid var(--outline-var); }
-
 .exp-brief { display: none; color: var(--on-surface-var); font-size: 0.9rem; line-height: 1.75; }
 .scroll-progress { display: block; }
 

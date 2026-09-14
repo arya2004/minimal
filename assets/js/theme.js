@@ -20,7 +20,6 @@ const THEMES = [
   { id: 'fog',         name: 'Fog',         hue: 210, chroma: 20 },
 ];
 
-const MODE_KEY = 'ap-mode';
 const LAST_THEME_INDEX_KEY = 'ap-last-theme-index';
 const FAVICON_ID = 'ap-favicon';
 const root = document.documentElement;
@@ -29,7 +28,6 @@ export const reducedMotion = window.matchMedia('(max-width: 768px), (prefers-red
 const coarsePointer = window.matchMedia('(pointer: coarse)');
 
 let currentTheme = 0;
-let isDark = false;
 let snackTimer = 0;
 
 const byId = id => document.getElementById(id);
@@ -117,44 +115,6 @@ function applyTheme(index, { notify = true } = {}) {
   updateFavicon();
 }
 
-function syncModeControls() {
-  const iconValue = isDark ? 'light_mode' : 'dark_mode';
-  ['rail-dark-icon', 'top-dark-icon'].forEach(id => {
-    const icon = byId(id);
-    if (icon) icon.textContent = iconValue;
-  });
-  ['rail-dark-btn', 'top-dark-btn'].forEach(id => {
-    const control = byId(id);
-    if (!control) return;
-    const label = isDark ? 'Switch to light mode' : 'Switch to dark mode';
-    control.setAttribute('aria-pressed', String(isDark));
-    control.setAttribute('aria-label', label);
-    control.title = label;
-  });
-}
-
-function applyStoredMode() {
-  const savedMode = storage.get(MODE_KEY);
-  if (savedMode === 'dark' || savedMode === 'light') {
-    isDark = savedMode === 'dark';
-    root.dataset.mode = savedMode;
-  } else {
-    isDark = true;
-    root.dataset.mode = 'dark';
-  }
-  syncModeControls();
-}
-
-function toggleMode() {
-  isDark = !isDark;
-  root.dataset.mode = isDark ? 'dark' : 'light';
-  storage.set(MODE_KEY, root.dataset.mode);
-  syncModeControls();
-  showSnackbar(isDark ? 'Night mode' : 'Day mode');
-  haptic(12);
-  updateFavicon();
-}
-
 function pickRandomThemeIndex() {
   const lastIndex = Number.parseInt(storage.get(LAST_THEME_INDEX_KEY) ?? '', 10);
   if (THEMES.length <= 1) return 0;
@@ -185,7 +145,7 @@ export function haptic(pattern = 8) {
 }
 
 export function initializeTheme() {
-  applyStoredMode();
+  root.dataset.mode = 'dark';
   currentTheme = pickRandomThemeIndex();
   applyTheme(currentTheme, { notify: false });
 
@@ -196,7 +156,4 @@ export function initializeTheme() {
     });
   });
 
-  ['rail-dark-btn', 'top-dark-btn'].forEach(id => {
-    byId(id)?.addEventListener('click', toggleMode);
-  });
 }

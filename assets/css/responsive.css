@@ -352,7 +352,6 @@ main:focus {
   #experience .t-item .exp-list,
   #experience .t-item:first-child .exp-list { display: none; }
   #experience .t-item .exp-brief { display: block; }
-  [data-mode="light"] #hero .hero-ctas .btn { border: 1px solid var(--outline-var); color: var(--primary); }
 }
 
 /* No entrance, theme, navigation, or scroll motion. Hover feedback remains available. */
