@@ -6,7 +6,7 @@ const THEMES = [
   { id: 'coral',       name: 'Coral',       hue: 14,  chroma: 100 },
   { id: 'violet',      name: 'Violet',      hue: 270, chroma: 85 },
   { id: 'sage',        name: 'Sage',        hue: 145, chroma: 65 },
-  { id: 'obsidian',    name: 'Obsidian',    hue: 220, chroma: 18 },
+  { id: 'obsidian',    name: 'Obsidian',    hue: 0,   chroma: 0 },
   { id: 'indigo',      name: 'Indigo',      hue: 232, chroma: 78 },
   { id: 'frost',       name: 'Frost',       hue: 205, chroma: 42 },
   { id: 'lemongrass',  name: 'Lemongrass',  hue: 78,  chroma: 72 },
@@ -15,21 +15,21 @@ const THEMES = [
   { id: 'porcelain',   name: 'Porcelain',   hue: 36,  chroma: 28 },
   { id: 'lavender',    name: 'Lavender',    hue: 255, chroma: 62 },
   { id: 'berry',       name: 'Berry',       hue: 346, chroma: 92 },
-  { id: 'fog',         name: 'Fog',         hue: 150, chroma: 20 },
+  { id: 'canyon',      name: 'Canyon',      hue: 22,  chroma: 96 },
+  { id: 'olive',       name: 'Olive',       hue: 135, chroma: 38 },
+  { id: 'fog',         name: 'Fog',         hue: 210, chroma: 20 },
 ];
 
 const MODE_KEY = 'ap-mode';
 const LAST_THEME_INDEX_KEY = 'ap-last-theme-index';
 const FAVICON_ID = 'ap-favicon';
 const root = document.documentElement;
-const controlTimers = new WeakMap();
 
-export const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+export const reducedMotion = window.matchMedia('(max-width: 768px), (prefers-reduced-motion: reduce)');
 const coarsePointer = window.matchMedia('(pointer: coarse)');
 
 let currentTheme = 0;
 let isDark = false;
-let themeShiftTimer = 0;
 let snackTimer = 0;
 
 const byId = id => document.getElementById(id);
@@ -89,15 +89,6 @@ function showSnackbar(text) {
   snackTimer = window.setTimeout(() => snackbar.classList.remove('show'), 2200);
 }
 
-function playThemeShift() {
-  if (reducedMotion.matches) return;
-  window.clearTimeout(themeShiftTimer);
-  root.classList.remove('theme-shifting');
-  void root.offsetWidth;
-  root.classList.add('theme-shifting');
-  themeShiftTimer = window.setTimeout(() => root.classList.remove('theme-shifting'), 420);
-}
-
 function syncThemeControls(theme) {
   const name = byId('rail-theme-name');
   if (name) name.textContent = theme.name;
@@ -114,6 +105,7 @@ function applyTheme(index, { notify = true } = {}) {
   const theme = THEMES[index];
   if (!theme) return;
 
+  root.dataset.theme = theme.id;
   root.style.setProperty('--h', String(theme.hue));
   root.style.setProperty('--c', `${theme.chroma}%`);
   storage.set(LAST_THEME_INDEX_KEY, String(index));
@@ -121,7 +113,6 @@ function applyTheme(index, { notify = true } = {}) {
 
   if (notify) {
     showSnackbar(theme.name);
-    playThemeShift();
   }
   updateFavicon();
 }
@@ -148,7 +139,8 @@ function applyStoredMode() {
     isDark = savedMode === 'dark';
     root.dataset.mode = savedMode;
   } else {
-    isDark = root.dataset.mode === 'dark';
+    isDark = true;
+    root.dataset.mode = 'dark';
   }
   syncModeControls();
 }
@@ -158,7 +150,6 @@ function toggleMode() {
   root.dataset.mode = isDark ? 'dark' : 'light';
   storage.set(MODE_KEY, root.dataset.mode);
   syncModeControls();
-  playThemeShift();
   showSnackbar(isDark ? 'Night mode' : 'Day mode');
   haptic(12);
   updateFavicon();
@@ -184,17 +175,8 @@ function cycleTheme() {
   haptic([8, 30, 8]);
 }
 
-function kickThemeControl(control) {
-  if (reducedMotion.matches) return;
-  window.clearTimeout(controlTimers.get(control));
-  control.classList.remove('theme-kick');
-  void control.offsetWidth;
-  control.classList.add('theme-kick');
-  controlTimers.set(control, window.setTimeout(() => control.classList.remove('theme-kick'), 500));
-}
-
 export function haptic(pattern = 8) {
-  if (!coarsePointer.matches || typeof navigator.vibrate !== 'function') return;
+  if (reducedMotion.matches || !coarsePointer.matches || typeof navigator.vibrate !== 'function') return;
   try {
     navigator.vibrate(pattern);
   } catch {
@@ -211,7 +193,6 @@ export function initializeTheme() {
     const control = byId(id);
     control?.addEventListener('click', () => {
       cycleTheme();
-      kickThemeControl(control);
     });
   });
 

@@ -26,8 +26,6 @@ section {
 main:focus {
   outline: none;
 }
-
-.proj-card,
 .skill-grp,
 .edu-card,
 .ach-item,
@@ -55,14 +53,9 @@ main:focus {
 #hero .hero-ctas .material-symbols-rounded {
   flex: 0 0 28px;
 }
-
-.cp-card::before,
-.open-source-block .os-card::before {
+.cp-card::before {
   overflow: hidden;
 }
-
-.proj-name,
-.proj-sub,
 .cert-name,
 .pub-title,
 .exp-company,
@@ -77,27 +70,6 @@ main:focus {
 
 .hero-ctas .btn {
   min-height: 44px;
-}
-
-.chip-ripple {
-  position: absolute;
-  left: var(--ripple-x);
-  top: var(--ripple-y);
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.25;
-  pointer-events: none;
-  transform: translate(-50%, -50%) scale(0);
-  animation: chip-ripple 420ms ease-out forwards;
-}
-
-@keyframes chip-ripple {
-  to {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(22);
-  }
 }
 
 /* Phone and small tablet: retain the approved chat-thread composition. */
@@ -125,12 +97,6 @@ main:focus {
   .hero-pill {
     max-width: 100%;
     line-height: 1.3;
-  }
-
-  #projects .proj-card:nth-child(n) .proj-desc {
-    display: block;
-    overflow: visible;
-    -webkit-line-clamp: unset;
   }
 
   .bottom-nav {
@@ -179,14 +145,6 @@ main:focus {
   #hero .hero-ctas .btn {
     padding-inline: 9px;
     font-size: 0.875rem;
-  }
-
-  .hero-stat {
-    padding-right: 12px;
-  }
-
-  .stat-val {
-    font-size: clamp(1.65rem, 8vw, 2rem);
   }
 }
 
@@ -250,10 +208,6 @@ main:focus {
     padding-left: clamp(48px, 5vw, 64px);
   }
 
-  #projects .proj-card {
-    padding: clamp(26px, 3vw, 34px);
-  }
-
   #skills .skills-grid {
     column-gap: clamp(30px, 4vw, 42px);
   }
@@ -280,21 +234,6 @@ main:focus {
 
   .hero-name {
     font-size: clamp(3.2rem, 11vw, 4.4rem);
-  }
-
-  .hero-stats {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .hero-stat:nth-child(n) {
-    padding: 14px 10px;
-    border-top: 0;
-    border-left: 1px solid var(--outline-var);
-  }
-
-  .hero-stat:first-child {
-    border-left: 0;
-    padding-left: 0;
   }
 }
 
@@ -332,5 +271,103 @@ main:focus {
   a {
     color: inherit;
     text-decoration: none;
+  }
+}
+
+/* Mobile experience summaries; full contribution lists remain on desktop. */
+@media (max-width: 768px) {
+  #experience .t-item:first-child .exp-list { grid-template-columns: 1fr; }
+  #experience .t-item:nth-child(2) { width: 96%; }
+  #experience .t-item:not(:first-child) .t-card { background: var(--cnt-low); }
+  #experience .t-item:nth-child(3) .exp-company { color: var(--on-surface); }
+  .publications-block .pub-item:nth-child(n) { width: calc(100% - 42px); margin: 0 0 0 42px; }
+  .publications-block .pub-item:nth-child(n) .pub-num { left: -42px; right: auto; }
+  .profile-copy { padding: 20px; border-radius: 7px 24px 24px 24px; background: var(--cnt-low); }
+  .hero-summary { font-size: 0.9rem; }
+  #hero { min-height: auto; }
+}
+
+/* Mobile is entirely static, including pseudo-elements and interaction feedback. */
+@media (max-width: 768px), (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+    will-change: auto !important;
+  }
+#experience .timeline,
+#skills .skills-grid,
+#education .edu-stack,
+#achievements .ach-grid,
+#achievements .cp-row,
+#achievements .pub-stack,
+#achievements .certs-grid { transform: none !important; }
+  .reveal { opacity: 1; transform: none; }
+.btn:active,
+.ctrl-btn:active,
+.nav-item:active,
+.chip:hover,
+.cert-card:hover,
+.cert-card:active,
+.cp-card:hover,
+.cp-card:active,
+.pub-item:hover,
+.edu-card:hover,
+.ach-grid .ach-item:hover,
+.t-card:hover,
+.fab:active { transform: none !important; }
+  html.theme-shifting body::after { display: none; }
+}
+
+@media (max-width: 768px) {
+  .top-app-bar, .bottom-nav, .snackbar {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--surface);
+  }
+}
+
+@media (max-width: 768px) {
+  #education .edu-stack { grid-template-columns: 1fr; }
+  #education .edu-card:not(:first-child) { background: var(--cnt-low); }
+}
+
+/* Scroll position is direct feedback, without interpolation or page motion. */
+@media (max-width: 768px) {
+  .scroll-progress { display: block; inset: 0 0 auto 0; z-index: 700; height: 3px; }
+}
+
+/* Keep all three education entries on one desktop row. */
+@media (min-width: 1024px) {
+  #education .edu-stack { grid-template-columns: 1.35fr 1fr 1fr; gap: 30px; }
+  #education .edu-card:nth-child(n) {
+    grid-column: auto;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  #experience .t-item .exp-summary,
+  #experience .t-item .exp-list,
+  #experience .t-item:first-child .exp-list { display: none; }
+  #experience .t-item .exp-brief { display: block; }
+  [data-mode="light"] #hero .hero-ctas .btn { border: 1px solid var(--outline-var); color: var(--primary); }
+}
+
+/* No entrance, theme, navigation, or scroll motion. Hover feedback remains available. */
+*, *::before, *::after {
+  animation: none !important;
+  scroll-behavior: auto !important;
+  will-change: auto !important;
+}
+html.theme-shifting body::after { display: none; }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .btn:hover, .ctrl-btn:hover, .cert-card:hover, .cp-card:hover,
+  .pub-item:hover, .footer-link:hover, .fab:hover,
+  .t-card:hover, .skill-grp:hover, .edu-card:hover, .ach-item:hover,
+  .proj-card:hover, .cp-card:hover {
+    transition: transform 160ms ease, border-radius 160ms ease, box-shadow 160ms ease,
+      color 160ms ease, border-color 160ms ease, letter-spacing 160ms ease !important;
   }
 }
